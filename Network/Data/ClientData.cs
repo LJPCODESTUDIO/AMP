@@ -164,10 +164,12 @@ namespace AMP.Network.Data {
             banEntry.reason = reason;
             
             ModManager.tempBanlist.Add(banEntry);
+            Kick(reason);
         }
         
         public void Ban(string reason) {
             ModManager.banlist.Ban(this, reason);
+            Kick(reason);
         }
 
         internal bool IsBanned() {

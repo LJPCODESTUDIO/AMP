@@ -2130,7 +2130,7 @@ namespace AMP.UI {
                     banIcon.LoadImage(AMPResources.ban);
                     Button banBtn = CreateButton("Ban", Color.black, new Vector2(400, 50), banIcon);
                     banBtn.transform.SetParent(gobj.transform, false);
-                    kickBtn.onClick.AddListener(() => {
+                    banBtn.onClick.AddListener(() => {
                         Log.Debug($"Requesting Ban of {pnd.name}");
                         new ModerationBanPacket(pnd.clientId).SendToServer();
                     });
@@ -2371,7 +2371,6 @@ namespace AMP.UI {
             else if ("WRONG_PASSWORD".Equals(reason)) reason = "Wrong password";
             else if ("SERVER_CLOSED".Equals(reason)) reason = "Server closed";
             else if ("CONNECTION_CLOSED".Equals(reason)) yield break;
-
 
             ShowPage(Page.Connecting);
             connectingMessage.text = $"Connection closed.\n\nReason: {reason}";

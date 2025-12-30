@@ -160,7 +160,7 @@ namespace AMP.Network.Server {
 
             SendItemsAndCreatures(client);
         
-            Log.Info(Defines.SERVER, $"Player {client.ClientName} ({client.ClientId} / {client.player.uniqueId}) joined the server.");
+            Log.Info(Defines.SERVER, $"Player {client.ClientName} ({client.ClientId}) joined the server.");
             Log.Info(Defines.SERVER, $"{netamiteServer.ConnectedClients} / {netamiteServer.MaxClients} Players currently connected: { string.Join(", ", netamiteServer._clients.Select(x => x.Value.ClientName).ToArray()) }");
 
             CheckAutoModerator();
