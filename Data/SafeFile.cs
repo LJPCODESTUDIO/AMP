@@ -42,6 +42,7 @@ namespace AMP.Data {
             public bool   allowVoiceChat        = true;
             public byte   baseTickRate          = 10;
             public byte   playerTickRate        = 30;
+            public bool   autoLobbyModerator    = false;
 
             public bool useModWhitelist         = false;
             public string[] modWhitelist        = new string[0];

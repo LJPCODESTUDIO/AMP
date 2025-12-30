@@ -424,8 +424,6 @@ namespace AMP.UI {
             btnText.color = Color.black;
             btnText.fontSize = 35;
             btnText.alignment = TextAlignmentOptions.Center;
-
-
             #endregion
 
             #region Join Code Panel
@@ -2371,11 +2369,12 @@ namespace AMP.UI {
         private IEnumerator FailedConnectionCoroutine(string reason) {
             if ("SERVER_FULL".Equals(reason)) reason = "Server is full";
             else if ("WRONG_PASSWORD".Equals(reason)) reason = "Wrong password";
+            else if ("SERVER_CLOSED".Equals(reason)) reason = "Server closed";
             else if ("CONNECTION_CLOSED".Equals(reason)) yield break;
 
 
             ShowPage(Page.Connecting);
-            connectingMessage.text = $"Connection failed.\n\nReason: {reason}";
+            connectingMessage.text = $"Connection closed.\n\nReason: {reason}";
             connectingMessage.color = Color.red;
 
             yield return new WaitForSeconds(5);
