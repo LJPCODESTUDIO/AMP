@@ -535,7 +535,7 @@ namespace AMP.UI {
             gobj.transform.SetParent(rect.transform);
             rect = gobj.AddComponent<RectTransform>();
             rect.sizeDelta = new Vector2(400, 150);
-            rect.localPosition = new Vector3(0, 0, 0);
+            rect.localPosition = new Vector3(0, 0, -20);
             joinCode = gobj.AddComponent<TextMeshProUGUI>();
             joinCode.color = Color.black;
             joinCode.alignment = TextAlignmentOptions.Center;
