@@ -78,6 +78,8 @@ namespace AMP.Network.Packets.Implementation {
             */
 
             DiscordIntegration.Instance.UpdateActivity();
+            Dispatcher.Enqueue(() => { UI.IngameModUI.currentUI?.RefreshPage(); });
+            
             return true;
         }
 

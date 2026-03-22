@@ -48,6 +48,8 @@ namespace AMP.Network.Client {
         internal int packetsSentPerSec = 0;
         internal int packetsReceivedPerSec = 0;
 
+        private bool stopped = false;
+        
         float time = 0f;
         void FixedUpdate() {
             if(ModManager.clientInstance.netclient.ClientId <= 0) return;
@@ -262,6 +264,8 @@ namespace AMP.Network.Client {
         }
 
         internal void Stop() {
+            stopped = true;
+            
             threadCancel.Cancel();
             StopAllCoroutines();
 
@@ -542,8 +546,10 @@ namespace AMP.Network.Client {
                     Destroy(ps.creature.gameObject);
                 });
             }
-
+            
             ModManager.clientSync.syncData.players.TryRemove(ps.clientId, out _);
+            
+            if(!stopped) Dispatcher.Enqueue(() => { UI.IngameModUI.currentUI?.RefreshPage(); });
         }
 
         internal void MovePlayer(PlayerNetworkData pnd) {

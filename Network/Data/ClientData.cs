@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Threading;
 using AMP.Data;
@@ -51,6 +52,8 @@ namespace AMP.Network.Data {
 
         public ClientData() { }
 
+        public List<ClientData> votersForKick = new List<ClientData>();
+        
         private float damageMultiplicator = ModManager.safeFile.hostingSettings.pvpDamageMultiplier;
 
         #region Damaging
@@ -177,11 +180,11 @@ namespace AMP.Network.Data {
         }
 
         internal bool IsBanned() {
-            foreach(BanEntry entry in ModManager.tempBanlist) {
+            foreach (BanEntry entry in ModManager.tempBanlist) {
                 if(entry.id == player.uniqueId) { return true; }
             }
             
-            if(ModManager.safeFile.hostingSettings.useGlobalPlayerBanlist) {
+            if (ModManager.safeFile.hostingSettings.useGlobalPlayerBanlist) {
                 Thread thread = new Thread(IsGloballyBanned) {
                     Name = "CheckGlobalBan"
                 };
@@ -192,7 +195,13 @@ namespace AMP.Network.Data {
         }
         
         internal void IsGloballyBanned() {
-            if(player.uniqueId == null || player.uniqueId.Length == 0) return;
+            Log.Warn(player.uniqueId);
+            if (player.uniqueId == null || player.uniqueId.Length == 0) {
+                Dispatcher.Enqueue(() => {
+                    Log.Err(Defines.SERVER, $"Couldn't check global banlist for {ClientName}. There was no id supllied, not sure what to do.");
+                });
+                return;
+            }
             
             try {
                 WebRequest request = WebRequest.Create($"https://{ModManager.safeFile.hostingSettings.masterServerUrl}/api/bancheck.php?id={player.uniqueId}");
@@ -204,9 +213,9 @@ namespace AMP.Network.Data {
                     
                     string responseFromServer = reader.ReadToEnd();
                     
-                    Dispatcher.Enqueue(() => {
-                        Log.Debug(responseFromServer);
-                    });
+                    if("[{\"ok\":true}]".Equals(responseFromServer)) {
+                        Ban("You are banned from all public servers.");
+                    }
                 } else {
                     Dispatcher.Enqueue(() => {
                         Log.Err(Defines.SERVER, $"Couldn't check global banlist for {ClientName} ({ClientId}), this should not happen. Please check server status. Player will be able to join.");

@@ -1325,7 +1325,11 @@ namespace AMP.UI {
                 FixSize(child);
             }
         }
-
+        
+        internal void RefreshPage() {
+            ShowPage(currentPage);
+        }
+        
         private Page currentPage = Page.Serverlist;
         private void ShowPage(Page page) {
             if(page == Page.WARNING && showedWarning) {

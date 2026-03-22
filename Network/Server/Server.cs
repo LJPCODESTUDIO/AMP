@@ -150,25 +150,25 @@ namespace AMP.Network.Server {
                     return;
                 }
             }
-
+            
             // Send all player data to the new client
             foreach(ClientData other_client in netamiteServer.Clients.ToArray()) {
                 if(other_client._player == null) continue;
                 netamiteServer.SendTo(client, new PlayerDataPacket(other_client.player));
                 netamiteServer.SendTo(client, new PlayerEquipmentPacket(other_client.player));
             }
-
+            
             SendItemsAndCreatures(client);
-        
+            
             Log.Info(Defines.SERVER, $"Player {client.ClientName} ({client.ClientId}) joined the server.");
             Log.Info(Defines.SERVER, $"{netamiteServer.ConnectedClients} / {netamiteServer.MaxClients} Players currently connected: { string.Join(", ", netamiteServer._clients.Select(x => x.Value.ClientName).ToArray()) }");
-
+            
             CheckAutoModerator();
-
+            
             ServerEvents.InvokeOnPlayerJoin(client);
             
             ModManager.serverInstance.netamiteServer.InitializeTimeSync(client);
-
+            
             client.greeted = true;
             client.LoadedLevel = true;
         }
@@ -179,7 +179,7 @@ namespace AMP.Network.Server {
         internal void CheckAutoModerator() {
             if (!ModManager.safeFile.hostingSettings.autoLobbyModerator) return;
             if (netamiteServer.ConnectedClients == 0) return;
-            
+
             bool hasModerator = false;
             foreach (ClientData other_client in netamiteServer.Clients.ToArray()) {
                 if (other_client.permissionLevel >= Datatypes.PermissionLevel.LOBBY_ADMIN) {
@@ -187,8 +187,8 @@ namespace AMP.Network.Server {
                     break;
                 }
             }
-            
-            if(!hasModerator) {
+
+            if (!hasModerator) {
                 ClientData client = ((ClientData)netamiteServer.Clients[0]);
                 client.permissionLevel = Datatypes.PermissionLevel.LOBBY_ADMIN;
                 Log.Info(Defines.SERVER, $"Player {client.ClientName} has been automatically promoted to lobby admin.");
