@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading;
@@ -87,6 +88,19 @@ namespace AMP.Network.Data {
         
         public void SetPushbackMultiplicator(float multiplicator) {
             pushbackMultiplicator = multiplicator;
+        }
+        
+        public Vector3 ApplyPushbackMultiplicator(Vector3 vec, float intensity = 1f) {
+            float magnitude = vec.magnitude;
+            
+            if (magnitude > 0) {
+                float factor = (float) (Math.Log(1 + magnitude * intensity) / (magnitude * intensity));
+                vec *= factor;
+            }
+            
+            vec *= GetPlayerPushbackMultiplicator();
+            
+            return vec;
         }
         #endregion
 
@@ -195,7 +209,6 @@ namespace AMP.Network.Data {
         }
         
         internal void IsGloballyBanned() {
-            Log.Warn(player.uniqueId);
             if (player.uniqueId == null || player.uniqueId.Length == 0) {
                 Dispatcher.Enqueue(() => {
                     Log.Err(Defines.SERVER, $"Couldn't check global banlist for {ClientName}. There was no id supllied, not sure what to do.");
