@@ -224,7 +224,7 @@ namespace AMP.Network.Client.NetworkComponents {
             float damage = creature.currentHealth - creature.maxHealth; // Should be negative
             if(damage >= 0) return;
             creature.currentHealth = creature.maxHealth;
-            
+
             new PlayerHealthChangePacket(playerNetworkData.clientId, damage, collisionInstance.impactVelocity, collisionInstance.IsDoneByPlayer()).SendToServerReliable();
             
             Log.Debug(Defines.CLIENT, $"Damaged player {playerNetworkData.name} with {damage} damage and {collisionInstance.impactVelocity} force.");

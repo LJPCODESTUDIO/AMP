@@ -31,7 +31,7 @@ namespace AMP.Network.Data.Sync {
         }
 
         public static Vector3 Compensate(Vector3 value, Vector3 velocity, float compensationFactor) {
-            return value + (velocity.normalized * compensationFactor);
+            return value + (velocity * compensationFactor);
         }
 
         public static Quaternion Compensate(Quaternion value, Vector3 velocity, float compensationFactor) {
